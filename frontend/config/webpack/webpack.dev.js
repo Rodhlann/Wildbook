@@ -1,26 +1,26 @@
-/* eslint-disable no-undef */
+import { join } from "path";
+import { HotModuleReplacementPlugin } from "webpack";
+import UnusedWebpackPlugin from "unused-webpack-plugin";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-const path = require("path");
-const webpack = require("webpack");
-const UnusedWebpackPlugin = require("unused-webpack-plugin");
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-module.exports = {
-  mode: "development",
-  devtool: "source-map",
-  devServer: {
-    disableHostCheck: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-    historyApiFallback: true,
-    hot: true,
-    port: 3000,
-    writeToDisk: true,
+export const mode = "development";
+export const devtool = "source-map";
+export const devServer = {
+  disableHostCheck: true,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new UnusedWebpackPlugin({
-      directories: [path.join(__dirname, "../../src")],
-    }),
-  ],
+  historyApiFallback: true,
+  hot: true,
+  port: 3000,
+  writeToDisk: true,
 };
+export const plugins = [
+  new HotModuleReplacementPlugin(),
+  new UnusedWebpackPlugin({
+    directories: [join(__dirname, "../../src")],
+  }),
+];

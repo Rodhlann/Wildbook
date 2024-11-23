@@ -5,6 +5,8 @@
 export PUBLIC_URL=/react/
 export SITE_NAME="Test Site Name"
 
+# TODO: why does this need to be installed here instead
+# of just living in the package.json?
 npm install react-app-rewired
 
 cd frontend
@@ -21,5 +23,5 @@ rsync -a build/ ../src/main/webapp/react
 
 # hacky cleanup of changes left over
 cd ..
-git checkout -- package.json package-lock.json
+npm uninstall react-app-rewired
 

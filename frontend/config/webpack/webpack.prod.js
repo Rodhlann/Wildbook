@@ -1,26 +1,25 @@
-/* eslint-disable no-undef */
+import { resolve } from "path";
+import { resolve as _resolve } from "path";
+import TerserPlugin from "terser-webpack-plugin";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-// const webpack = require("webpack");
-const { resolve } = require("path");
-const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin");
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const rootDir = resolve(__dirname, "../../");
-const dist = path.resolve(rootDir, "dist");
+const dist = _resolve(rootDir, "dist");
 
-module.exports = {
-  mode: "production",
-  devtool: "source-map",
-  entry: {
-    main: path.resolve(rootDir, "src/index.jsx"),
-  },
-  output: {
-    path: dist,
-    filename: "[name].js",
-    chunkFilename: "[name].chunk.js",
-    publicPath: "/",
-  },
-  optimization: {
-    minimizer: [new TerserPlugin()],
-  },
+export const mode = "production";
+export const devtool = "source-map";
+export const entry = {
+  main: _resolve(rootDir, "src/index.jsx"),
+};
+export const output = {
+  path: dist,
+  filename: "[name].js",
+  chunkFilename: "[name].chunk.js",
+  publicPath: "/",
+};
+export const optimization = {
+  minimizer: [new TerserPlugin()],
 };
