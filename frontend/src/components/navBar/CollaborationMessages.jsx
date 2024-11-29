@@ -7,8 +7,8 @@ export default function CollaborationMessages({
   getAllNotifications,
   setModalOpen,
 }) {
-  // eslint-disable-next-line no-unused-vars
-  const [loading, setLoading] = useState(false);
+  // TODO this is unused, is it still necessary?
+  const [_loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [error, setError] = useState("");
 

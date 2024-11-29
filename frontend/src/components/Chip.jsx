@@ -74,8 +74,7 @@ function Chip({ children }) {
         entries.push(`${filterKey || key} contains "${value}"`);
       });
     } else if (query?.exists) {
-      // eslint-disable-next-line no-unused-vars
-      Object.entries(query.exists).forEach(([key, value]) => {
+      Object.entries(query.exists).forEach(([_, value]) => {
         entries.push(`${filterKey || value} filter is set`);
       });
     } else if (query?.term) {
@@ -99,8 +98,7 @@ function Chip({ children }) {
         `${filterKey || filterId} is any of [${uniqueLabels.join(", ")}]`,
       );
     } else if (query?.biologicalMeasurements) {
-      // eslint-disable-next-line no-unused-vars
-      Object.entries(query).forEach(([key, value]) => {
+      Object.entries(query).forEach(([key, _]) => {
         entries.push(`${filterKey || key} filter is set`);
       });
     }

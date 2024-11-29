@@ -12,7 +12,7 @@ function refreshNoop() {
 function formatError(response) {
   try {
     return response?.error ? response.error.toJSON().message : null;
-  } catch (e) {
+  } catch (_) {
     return "Error could not be formatted as JSON";
   }
 }

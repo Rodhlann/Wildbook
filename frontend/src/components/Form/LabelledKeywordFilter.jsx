@@ -17,11 +17,10 @@ const colourStyles = {
 
 export default function LabelledKeywordFilter({ data, onChange }) {
   const [isChecked_keyword, setIsChecked_keyword] = React.useState(false);
-  // eslint-disable-next-line no-unused-vars
   const labelledKeywordsOptions =
-    Object.entries(data?.labeledKeyword || {}).map(([key, value]) => {
+    Object.entries(data?.labeledKeyword || {}).map(([key, _value]) => {
       return {
-        value: key,
+        value: key, // TODO is this intentional? Should it be using value?
         label: key,
       };
     }) || [];

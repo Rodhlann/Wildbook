@@ -11,8 +11,8 @@ import { useContext } from "react";
 export default function AvatarAndUserProfile({ avatar }) {
   const navigate = useNavigate();
   const [shows, setShows] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  // TODO this is currently unused, is it still necessary for this use case?
+  const { _isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const logout = async (event) => {
     event.preventDefault();
     await fetch("/api/v3/logout")
@@ -43,7 +43,10 @@ export default function AvatarAndUserProfile({ avatar }) {
         }}
         show={shows}
       >
-        <NavDropdown.Item href={`${process.env.PUBLIC_URL}/home/`} style={{ color: "black" }}>
+        <NavDropdown.Item
+          href={`${process.env.PUBLIC_URL}/home/`}
+          style={{ color: "black" }}
+        >
           <FormattedMessage id="LANDING_PAGE" />
         </NavDropdown.Item>
         <NavDropdown.Item href={"/myAccount.jsp"} style={{ color: "black" }}>

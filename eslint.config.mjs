@@ -3,14 +3,20 @@ import pluginJs from "@eslint/js";
 import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 import babelParser from "@babel/eslint-parser";
 import reactHooks from "eslint-plugin-react-hooks";
+import jestPlugin from "eslint-plugin-jest";
+import importPlugin from "eslint-plugin-import";
 
 export default [
+  // Base configurations
   pluginJs.configs.recommended,
   pluginReactConfig,
+
+  // Global React configuration
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     plugins: {
       "react-hooks": reactHooks,
+      import: importPlugin,
     },
     languageOptions: {
       globals: {
@@ -18,53 +24,71 @@ export default [
         process: "readonly",
       },
       parser: babelParser,
-      
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
     },
     settings: {
       react: {
-        version: "detect"
-      }
+        version: "detect",
+      },
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx"],
+        },
+      },
     },
-
     rules: {
-      "semi": 2,
-      "react/prop-types": 0,
-      "jsx-no-bind": 0,
-      "react/jsx-no-bind": 0,
-      "react/jsx-filename-extension": 0,
-      "react/jsx-props-no-spreading": 0,
-      "react/destructuring-assignment": 0,
-      "react/forbid-prop-types": 0,
-      "react/jsx-wrap-multilines": 0,
-      "react/style-prop-object": [2, { "allow": ["FormattedNumber"] }],
-      "import/prefer-default-export": 0,
-      "function-paren-newline": 0,
-      "react/function-component-definition": 0,
-      "func-names": 0,
-      "no-underscore-dangle": 0,
-      "no-console": 1,
-      "prefer-destructuring": 0,
-      "operator-linebreak": 0,
-      "indent": 0,
-      "camelcase": 0,
-      "space-before-function-paren": 0,
-      "implicit-arrow-linebreak": 0,
-      "nonblock-statement-body-position": 0,
-      "react/prefer-stateless-function": 0,
-      "curly": 0,
-      "object-curly-newline": 0,
-      "prefer-template": 0,
-      "arrow-parens": 0,
-      "no-param-reassign": 0,
-      "no-mixed-operators": 0,
-      "no-else-return": 0,
+      // Consolidated and simplified rule configuration
+      semi: ["error", "always"],
+      "no-unused-vars": [
+        "error",
+        {
+          vars: "all",
+          args: "after-used",
+          ignoreRestSiblings: false,
+          varsIgnorePattern: "^_",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+      "no-console": "warn",
 
+      // React-specific rules with more controlled disabling
+      "react/prop-types": "off",
+      "react/jsx-no-bind": "off",
+      "react/jsx-filename-extension": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/style-prop-object": ["error", { allow: ["FormattedNumber"] }],
+
+      // Import plugin rules
+      "import/prefer-default-export": "off",
+
+      // Relaxed formatting and style rules
+      curly: "off",
+      indent: "off",
+      camelcase: "off",
+      "space-before-function-paren": "off",
+      "operator-linebreak": "off",
+      "object-curly-newline": "off",
+      "arrow-parens": "off",
+
+      // Potential error prevention
+      "no-param-reassign": "warn",
+      "no-mixed-operators": "off",
+      "no-else-return": "off",
     },
   },
+
+  // Configuration files
   {
-    files: ['frontend/babel.config.js', 'frontend/jest.config.js', 'babel.config.js'],  // Specify the config files
+    files: ["**/babel.config.js", "**/jest.config.js", "**/*.config.js"],
     languageOptions: {
       globals: {
+        ...globals.node,
         require: "readonly",
         module: "readonly",
         __dirname: "readonly",
@@ -72,17 +96,28 @@ export default [
       },
     },
   },
+
+  // Node.js scripts
   {
-    files: ["**/__tests__/**/*.{js,jsx}", "**/*.test.{js,jsx}"],
+    files: ["**/*.{js,cjs}", "**/scripts/**/*.js"],
     languageOptions: {
       globals: {
-        jest: "readonly",    // Define Jest-specific globals
-        test: "readonly",
-        expect: "readonly",
+        ...globals.node,
       },
     },
+  },
+
+  // Jest test files
+  {
+    files: ["**/*.test.js"],
+    plugins: {
+      jest: jestPlugin,
+    },
+    languageOptions: {
+      globals: jestPlugin.environments.globals.globals,
+    },
     rules: {
-      "react/react-in-jsx-scope": 0,  // Disable React in scope for JSX cuz we are using React 17+
-    }
-  }
+      ...jestPlugin.configs.recommended.rules,
+    },
+  },
 ];

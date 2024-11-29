@@ -20,8 +20,8 @@ function Sidebar({
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  // eslint-disable-next-line no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
+  // TODO this is currently unused, is it still necessary?
+  const [_searchParams, setSearchParams] = useSearchParams();
 
   const num = queryID ? 1 : formFilters.length;
 

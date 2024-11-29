@@ -14,10 +14,10 @@ export default function MergeMessages({
     setModalOpen(false);
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const [showError, setShowError] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState("");
+  // TODO this state setter is unused, is useState still necessary?
+  const [showError, _setShowError] = useState(false);
+  // TODO this state setter is unused, is useState still necessary?
+  const [error, _setError] = useState("");
 
   const content = mergeData?.map((data) => {
     const mergePending = data.notificationType === "mergePending";

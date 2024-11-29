@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { ProgressBar, Image as BootstrapImage, Row, Col } from "react-bootstrap";
+import {
+  ProgressBar,
+  Image as BootstrapImage,
+  Row,
+  Col,
+} from "react-bootstrap";
 import Flow from "@flowjs/flow.js";
 import { FormattedMessage } from "react-intl";
 import ThemeContext from "../../ThemeColorProvider";
@@ -13,7 +18,6 @@ import EXIF from "exif-js";
 export const FileUploader = observer(({ store }) => {
   const [files, setFiles] = useState([]);
   const [flow, setFlow] = useState(null);
-  const [uploading, setUploading] = useState(false);
   const [previewData, setPreviewData] = useState([]);
   const fileInputRef = useRef(null);
   const { data } = useGetSiteSettings();
@@ -54,9 +58,7 @@ export const FileUploader = observer(({ store }) => {
       setPreviewData(savedFiles);
     }
     localStorage.getItem("submissionId") &&
-      store.setImageSectionSubmissionId(
-        localStorage.getItem("submissionId"),
-      );
+      store.setImageSectionSubmissionId(localStorage.getItem("submissionId"));
     localStorage.removeItem("submissionId");
     localStorage.removeItem("uploadedFiles");
   }, []);
@@ -153,11 +155,12 @@ export const FileUploader = observer(({ store }) => {
         if (dateTime) {
           const f = dateTime.split(/\D+/);
           let datetime1;
-          if (f.length == 3) datetime1 = f.join('-');
-          if ((f.length == 5) || (f.length == 6)) datetime1 = f.slice(0, 3).join('-') + ' ' + f.slice(3, 6).join(':');
+          if (f.length == 3) datetime1 = f.join("-");
+          if (f.length == 5 || f.length == 6)
+            datetime1 = f.slice(0, 3).join("-") + " " + f.slice(3, 6).join(":");
           store.setExifDateTime(datetime1);
           // geo: latitude && longitude ? { latitude, longitude } : null,
-        } 
+        }
       });
     });
 
@@ -173,7 +176,6 @@ export const FileUploader = observer(({ store }) => {
     });
 
     flowInstance.on("fileSuccess", (file) => {
-      setUploading(false);
       store.setImageSectionFileNames(file.name, "add");
       setPreviewData((prevPreviewData) =>
         prevPreviewData.map((preview) =>
@@ -185,7 +187,6 @@ export const FileUploader = observer(({ store }) => {
     });
 
     flowInstance.on("fileError", (file) => {
-      setUploading(false);
       setPreviewData((prevPreviewData) =>
         prevPreviewData.map((preview) =>
           preview.fileName === file.name
@@ -255,16 +256,11 @@ export const FileUploader = observer(({ store }) => {
   const handleUploadClick = () => {
     const validFiles = flow?.files
       ?.filter((file) => file.size <= maxSize * 1024 * 1024)
-      .filter(
-        (file) =>
-          !store.imageSectionFileNames?.includes(file.name),
-      );
+      .filter((file) => !store.imageSectionFileNames?.includes(file.name));
 
     if (validFiles?.length > 0) {
-      setUploading(true);
       if (store.imageSectionSubmissionId) {
-        flow.opts.query.submissionId =
-          store.imageSectionSubmissionId;
+        flow.opts.query.submissionId = store.imageSectionSubmissionId;
       } else {
         store.setImageSectionSubmissionId(submissionId);
         flow.opts.query.submissionId = submissionId;
@@ -302,22 +298,23 @@ export const FileUploader = observer(({ store }) => {
     <div className="p-2">
       <Row>
         <h5 style={{ fontWeight: "600" }}>
-          <FormattedMessage id="PHOTOS_SECTION" />{" "}
-          {store.imageRequired && "*"}
+          <FormattedMessage id="PHOTOS_SECTION" /> {store.imageRequired && "*"}
         </h5>
         <p>
           <FormattedMessage id="SUPPORTED_FILETYPES" />
           {`${" "}${maxSize} MB`}
         </p>
-        {!store.isHumanLocal && <Alert
-          variant="danger"
-          className="w-100 mt-1 mb-1 ms-2 me-4"
-          style={{
-            border: "none",
-          }}
-        >
-          <FormattedMessage id="ANON_UPLOAD_IMAGE_WARNING" />
-        </Alert>}
+        {!store.isHumanLocal && (
+          <Alert
+            variant="danger"
+            className="w-100 mt-1 mb-1 ms-2 me-4"
+            style={{
+              border: "none",
+            }}
+          >
+            <FormattedMessage id="ANON_UPLOAD_IMAGE_WARNING" />
+          </Alert>
+        )}
       </Row>
       <Row>
         {store.imageSectionError && (
@@ -378,7 +375,10 @@ export const FileUploader = observer(({ store }) => {
                   store.dateTimeSection.value?.toISOString(),
                 );
                 localStorage.setItem("exifDateTime", store.exifDateTime);
-                localStorage.setItem("locationID", store.placeSection.locationId);
+                localStorage.setItem(
+                  "locationID",
+                  store.placeSection.locationId,
+                );
                 localStorage.setItem("lat", store.lat);
                 localStorage.setItem("lon", store.lon);
               }}
@@ -421,10 +421,7 @@ export const FileUploader = observer(({ store }) => {
                     files.find((f) => f.name === preview.fileName),
                   );
 
-                  store.setImageSectionFileNames(
-                    preview.fileName,
-                    "remove",
-                  );
+                  store.setImageSectionFileNames(preview.fileName, "remove");
                 }}
               ></i>
               <BootstrapImage
@@ -432,7 +429,7 @@ export const FileUploader = observer(({ store }) => {
                 src={preview.src}
                 style={{ width: "100%", height: "120px", objectFit: "fill" }}
                 alt={`Preview ${index + 1}`}
-              // thumbnail
+                // thumbnail
               />
               <div
                 className="mt-2 "
@@ -512,7 +509,6 @@ export const FileUploader = observer(({ store }) => {
 
                 <MainButton
                   onClick={() => fileInputRef.current.click()}
-                  // disabled={uploading}
                   backgroundColor={theme.wildMeColors.cyan700}
                   color={theme.defaultColors.white}
                   noArrow={true}
